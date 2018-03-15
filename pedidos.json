@@ -1,0 +1,24 @@
+{
+  "pedido":"01",
+  "quantidade":1,
+  "tempo": 10,
+  "tempoMile": 10000,
+  "tipo": "segundos",
+  "pedido": [
+    {
+        "nome": "Hambúguer",
+        "comprado": true,
+        "quantidade": 1
+    },
+    {
+        "nome": "Batata Frita",
+        "comprado": true,
+        "quantidade": 2
+    },
+    {
+        "nome": "MilkShake",
+        "comprado": false,
+        "quantidade": 0
+    }
+  ]
+}

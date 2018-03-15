@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Simple HTML</title>
+    <script type="text/javascript" src="axios.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container" align="center" style="margin-top:100px">
+
+      <div id="titulo"></div>
+      <br>
+      <div id="pedido"></div>
+      <br>
+      <div id="feedback"></div>
+
+      <br><br>
+
+      <button id="btnIniciar" class="btn btn-primary" onclick="iniciarPedido()">Iniciar</button>
+
+    </div>
+
+    <script>
+
+      var pedidoFeito = false
+
+      function finalizarPedido(){
+
+        pedidoFeito = true
+
+        document.getElementById("titulo").style.display = "none"
+
+        document.getElementById("feedback").innerHTML = "<h1 style='color:green'>Parabéns, pedido entregado com sucesso!</h1>"
+
+      }
+
+      function iniciarPedido(){
+
+        axios.get('pedidos.json').then(function(result){
+
+          let data = result.data
+
+          document.getElementById("btnIniciar").style.display = "none"
+
+          document.getElementById("titulo").innerHTML = "<h1 style='color:red'>Você tem "+data.tempo+" "+data.tipo+" para fazer o pedido!</h1>"
+
+          document.getElementById("feedback").innerHTML = "<button class='btn btn-success' onclick='finalizarPedido()'>Finalizar Pedido</button>"
+
+          let pedido = data.pedido;
+
+          var html = ""
+
+          html += '<table class="table">'
+          html += '<thead>'
+            html += '<tr>'
+              html += '<th>Nome</th>'
+              html += '<th>Quantidade</th>'
+            html += '</tr>'
+          html += '</thead>'
+          html += '<tbody>'
+
+              for (i = 0; i < pedido.length; i++) {
+
+                if(pedido[i].comprado){
+
+                  html += '<tr>'
+
+                  html += '<td>'
+                    html += pedido[i].nome
+                  html += '</td>'
+
+                  html += '<td>'
+                    html += pedido[i].quantidade
+                  html += '</td>'
+
+                  html += '</tr>'
+
+                }
+
+              }
+          html += '</tbody>'
+          html += '</table>'
+
+          document.getElementById("pedido").innerHTML = html
+
+          setTimeout(function(){
+
+            if(!pedidoFeito){
+              document.getElementById("titulo").innerHTML = "<h1>Acabou o tempo!</h1>"
+              document.getElementById("feedback").innerHTML = "<h1 style='color:red'>Deu ruim, você não entregou o pedido!</h1>"
+            }
+
+           }, data.tempoMile);
+
+        })
+      }
+
+    </script>
+
+  </body>
+</html>
